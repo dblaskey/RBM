@@ -4,6 +4,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     use Block_Hydro
     use Block_Network
     use Block_Reservoir
+    use data_type
     !
     Implicit None
     !
@@ -81,19 +82,19 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     allocate (res_storage(nres,2))
     res_storage=0
     allocate (T_epil(nres))
-    T_epil = 4
+    T_epil = 4.1  !4 for test
     allocate (T_hypo(nres))
-    T_hypo = 4
+    T_hypo = 4.1  !4 for test
     allocate (T_res_in(nres))
     allocate (Q_res_in(nres))
     allocate (T_res_inflow(nres))
-    T_res_inflow = 4
+    T_res_inflow = 4 !for test   
     allocate (density_epil(nres))
-    density_epil = 0
+    density_epil = 1.0
     allocate (density_hypo(nres))
-    density_hypo = 0
+    density_hypo = 1.0
     allocate (density_in(nres))
-    density_in = 0
+    density_in = 1.0
     allocate (water_withdrawal(nres))
     allocate (temp_change_ep(nres))
     allocate (temp_change_hyp(nres))
@@ -132,12 +133,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     temp_sto=0.5
     ! Initialize headwaters temperatures
     !
-    T_head=4.0
+    T_head=4.0  ! 4.0 for test
     !
     !
     ! Initialize smoothed air temperatures for estimating headwaters temperatures
     !
-    T_smth=4.0
+    T_smth=4.0  ! 4.0 for test
     !
     !     open the output file
     !
@@ -532,8 +533,8 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !
                                         !     Calculate stream density 
                                         !
-                                        call stream_density(T_epil(res_no), density_epil(res_no))
-                                        call stream_density(T_hypo(res_no), density_hypo(res_no))
+                                        call stream_density(T_epil(res_no), density_epil(res_no), res_no)
+                                        call stream_density(T_hypo(res_no), density_hypo(res_no), res_no)
                                         !
                                         !     Calculate flow subroutine
                                         !
@@ -546,6 +547,11 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !     Error estimation
                                         !
                                         if (.not.exceed_error_bound) then
+                                            if (res_no.eq.15) then
+                                                write(11,*) nyear,nd,res_no, &
+                                                T_epil(res_no), T_hypo(res_no),&
+                                                density_epil(res_no), density_hypo(res_no)
+                                            end if
                                             call Error_estimate(nd,res_no)
                                         end if
                                         !
@@ -563,7 +569,18 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !     Calculate reservoir temperature
                                         !
                                         call reservoir_subroutine_implicit(res_no,q_surf,nd,dbt(ncell))
+                                        !if (res_no.eq.15) then 
+                                        !    write(13,*) &
+                                        !    nyear,nd,res_no,nsub,T_epil(res_no),T_hypo(res_no)
+                                        !end if
                                     end do
+                                    !if (res_no.eq.15) then
+                                    !    write(11,*) nyear,nd,res_no, &
+                                    !    error_e,error_h,numsub
+                                    !end if 
+                                    !if (res_no.eq.15) then 
+                                    !    write(12,*) nyear,nd, T_hypo(res_no)
+                                    !end if
                                     !
                                     T_0 = T_hypo(res_no) ! In reservoir, water is released from hypolimnion
                                     if (T_0.lt.0.5) T_0=0.5

@@ -1,10 +1,12 @@
 SUBROUTINE reservoir_subroutine_implicit(res_no,q_surf,nd,tair)
     use Block_Network
     use Block_Reservoir
+    use data_type
     !
     implicit none
     !
-    real :: dayx, q_surf, log_K_z, n_stability, density_dif
+    real(dp) :: density_dif
+    real :: dayx, q_surf, log_K_z,  n_stability
     real :: dif_epi_x, dif_hyp_x, advec_in_epix, advec_in_hypx
     real :: advec_epi_hyp, energy_x
     real :: epix,hypox,volume_tot
@@ -12,7 +14,6 @@ SUBROUTINE reservoir_subroutine_implicit(res_no,q_surf,nd,tair)
     real :: coeff_e1, coeff_e2, coeff_h1, coeff_h2, const_1, const_2
     real :: temp_epi, temp_hyp
     real :: temp_epi_pre, temp_hyp_pre
-
     integer :: nd,  res_no, tair
 
     logical :: mixed

@@ -1,10 +1,12 @@
 SUBROUTINE Error_estimate(nd,res_no)
     use Block_Network
     use Block_Reservoir
+    use data_type
     !
     implicit none
     !
-    real :: dayx, q_surf, log_K_z, n_stability, density_dif
+    real(dp) :: density_dif
+    real :: dayx, q_surf, log_K_z, n_stability
     real :: temp_epi_pre, temp_hyp_pre
     integer :: nd,res_no
 
@@ -25,7 +27,11 @@ SUBROUTINE Error_estimate(nd,res_no)
     !
     !     Estimate the numerical error in reservoir temperature 
     !
-    if (temp_epi_pre-temp_hyp_pre>0.01) then
+    !if (res_no.eq.15) then
+    !     write(11,*) K_z(res_no), temp_epi_pre, temp_hyp_pre, &
+    !                 density_dif, density_epil(res_no), density_hypo(res_no)
+    !end if
+    if (temp_epi_pre-temp_hyp_pre>0) then
         m11 = -(flow_in_epi_x+K_z(res_no)*surface_area(res_no))/volume_e_x(res_no)/dt_res
         m12 = K_z(res_no)*surface_area(res_no)/volume_e_x(res_no)/dt_res
         m21 = (flow_epi_hyp_x+K_z(res_no)*surface_area(res_no))/volume_h_x(res_no)/dt_res
