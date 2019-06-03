@@ -82,13 +82,13 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     allocate (res_storage(nres,2))
     res_storage=0
     allocate (T_epil(nres))
-    T_epil = 4.0  !4 for test
+    T_epil = 4.0
     allocate (T_hypo(nres))
-    T_hypo = 4.0  !4 for test
+    T_hypo = 4.0
     allocate (T_res_in(nres))
     allocate (Q_res_in(nres))
     allocate (T_res_inflow(nres))
-    T_res_inflow = 4 !for test   
+    T_res_inflow = 4
     allocate (density_epil(nres))
     density_epil = 1.0
     allocate (density_hypo(nres))
@@ -133,12 +133,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     temp_sto=0.5
     ! Initialize headwaters temperatures
     !
-    T_head=4.0  ! 4.0 for test
+    T_head=4.0
     !
     !
     ! Initialize smoothed air temperatures for estimating headwaters temperatures
     !
-    T_smth=4.0  ! 4.0 for test
+    T_smth=4.0
     !
     !     open the output file
     !
