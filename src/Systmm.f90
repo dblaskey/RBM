@@ -82,9 +82,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     allocate (res_storage(nres,2))
     res_storage=0
     allocate (T_epil(nres))
-    T_epil = 4.1  !4 for test
+    T_epil = 4.0  !4 for test
     allocate (T_hypo(nres))
-    T_hypo = 4.1  !4 for test
+    T_hypo = 4.0  !4 for test
     allocate (T_res_in(nres))
     allocate (Q_res_in(nres))
     allocate (T_res_inflow(nres))
@@ -526,7 +526,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                     if (exceed_error_bound) then
                                         numsub=MAX(ceiling(sqrt(abs(error_e)/error_threshold)), &
                                                    ceiling(sqrt(abs(error_h)/error_threshold)))
-                                        numsub=MIN(20,numsub)
+                                        numsub=MIN(96,numsub)
                                     end if
                                     dt_res = dt_comp/numsub
                                     DO nsub=1,numsub
@@ -547,12 +547,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !     Error estimation
                                         !
                                         if (.not.exceed_error_bound) then
-                                            if (res_no.eq.15) then
-                                                write(11,*) nyear,nd,res_no, &
-                                                T_epil(res_no), T_hypo(res_no),&
-                                                density_epil(res_no), density_hypo(res_no)
-                                            end if
-                                            call Error_estimate(nd,res_no)
+                                            call Error_estimate(nd,res_no,q_surf)
                                         end if
                                         !
                                         !     Adjust the timestep based on error
@@ -569,18 +564,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !     Calculate reservoir temperature
                                         !
                                         call reservoir_subroutine_implicit(res_no,q_surf,nd,dbt(ncell))
-                                        !if (res_no.eq.15) then 
-                                        !    write(13,*) &
-                                        !    nyear,nd,res_no,nsub,T_epil(res_no),T_hypo(res_no)
-                                        !end if
                                     end do
-                                    !if (res_no.eq.15) then
-                                    !    write(11,*) nyear,nd,res_no, &
-                                    !    error_e,error_h,numsub
-                                    !end if 
-                                    !if (res_no.eq.15) then 
-                                    !    write(12,*) nyear,nd, T_hypo(res_no)
-                                    !end if
                                     !
                                     T_0 = T_hypo(res_no) ! In reservoir, water is released from hypolimnion
                                     if (T_0.lt.0.5) T_0=0.5
