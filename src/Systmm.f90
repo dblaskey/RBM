@@ -4,6 +4,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     use Block_Hydro
     use Block_Network
     use Block_Reservoir
+    use data_type
     !
     Implicit None
     !
@@ -81,19 +82,19 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     allocate (res_storage(nres,2))
     res_storage=0
     allocate (T_epil(nres))
-    T_epil = 4
+    T_epil = 4.0
     allocate (T_hypo(nres))
-    T_hypo = 4
+    T_hypo = 4.0
     allocate (T_res_in(nres))
     allocate (Q_res_in(nres))
     allocate (T_res_inflow(nres))
     T_res_inflow = 4
     allocate (density_epil(nres))
-    density_epil = 0
+    density_epil = 1.0
     allocate (density_hypo(nres))
-    density_hypo = 0
+    density_hypo = 1.0
     allocate (density_in(nres))
-    density_in = 0
+    density_in = 1.0
     allocate (water_withdrawal(nres))
     allocate (temp_change_ep(nres))
     allocate (temp_change_hyp(nres))
@@ -525,15 +526,15 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                     if (exceed_error_bound) then
                                         numsub=MAX(ceiling(sqrt(abs(error_e)/error_threshold)), &
                                                    ceiling(sqrt(abs(error_h)/error_threshold)))
-                                        numsub=MIN(20,numsub)
+                                        numsub=MIN(96,numsub)
                                     end if
                                     dt_res = dt_comp/numsub
                                     DO nsub=1,numsub
                                         !
                                         !     Calculate stream density 
                                         !
-                                        call stream_density(T_epil(res_no), density_epil(res_no))
-                                        call stream_density(T_hypo(res_no), density_hypo(res_no))
+                                        call stream_density(T_epil(res_no), density_epil(res_no), res_no)
+                                        call stream_density(T_hypo(res_no), density_hypo(res_no), res_no)
                                         !
                                         !     Calculate flow subroutine
                                         !
@@ -546,7 +547,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         !     Error estimation
                                         !
                                         if (.not.exceed_error_bound) then
-                                            call Error_estimate(nd,res_no)
+                                            call Error_estimate(nd,res_no,q_surf)
                                         end if
                                         !
                                         !     Adjust the timestep based on error
