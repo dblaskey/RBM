@@ -66,9 +66,13 @@ SUBROUTINE flow_subroutine (res_no, nyear, nd)
     !     calculate water withdrawal based on inflow/outflow and storage change
     !
     if (nsub.eq.1) water_withdrawal(res_no) = Q1 - Q2 - (res_storage_post - res_storage_pre)/numsub
-    flow_out_hyp_x = Q2 ! * ftsec_to_msec * dt_res
-    flow_out_epi_x = 0
-    flow_epi_hyp_x = flow_in_epi_x
+    flow_out_hyp_x = Q2 * eh_withdraw_ratio(res_no,2) ! * ftsec_to_msec * dt_res
+    flow_out_epi_x = Q2 * eh_withdraw_ratio(res_no,1)
+    if (flow_in_epi_x .gt. flow_out_epi_x) then
+        flow_epi_hyp_x = flow_in_epi_x - flow_out_epi_x
+    else
+        flow_epi_hyp_x = 0.0
+    end if
     !
     !     if res_storage_post > res_storage_pre, when reservoir is storing water
     !

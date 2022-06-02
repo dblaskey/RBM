@@ -81,6 +81,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     allocate (res_start(nres))
     allocate (res_storage(nres,2))
     res_storage=0
+    allocate (eh_withdraw_ratio(nres,2))
+    eh_withdraw_ratio(:,1)=0.0 ! default withdrawl from hypolimnion
+    eh_withdraw_ratio(:,2)=1.0 ! 1: epilimnion, 2: hypolimnion
     allocate (T_epil(nres))
     T_epil = 4.0
     allocate (T_hypo(nres))
@@ -566,7 +569,10 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                         call reservoir_subroutine_implicit(res_no,q_surf,nd,dbt(ncell))
                                     end do
                                     !
-                                    T_0 = T_hypo(res_no) ! In reservoir, water is released from hypolimnion
+                                    ! In reservoir, water release is a mixture of both layers
+                                    !
+                                    T_0 = eh_withdraw_ratio(res_no,2)*T_hypo(res_no) + &
+                                          eh_withdraw_ratio(res_no,1)*T_epil(res_no) 
                                     if (T_0.lt.0.5) T_0=0.5
                                     temp(nr,ns_res_start(res_no):ns_res_end(res_no),n2)=T_0
                                     T_trib(nr)=T_0

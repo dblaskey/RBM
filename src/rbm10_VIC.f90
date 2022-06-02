@@ -54,6 +54,7 @@ PROGRAM RBM10_VIC
     character (len=200 ):: spatial_file
     character (len=200 ):: reservoir_file
     character (len=200 ):: reservoir_storage_file
+    character (len=200 ):: reservoir_sel_withdraw_file
     character (len=8)   :: start_data,end_data
     integer iargc
     integer numarg
@@ -119,6 +120,12 @@ PROGRAM RBM10_VIC
     !
     open(unit=38,FILE=TRIM(reservoir_storage_file),ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
     !
+    read(90,'(A)') reservoir_sel_withdraw_file
+    !
+    !     Open file with reservoir selective withdrawal data
+    !
+    open(unit=39,FILE=TRIM(reservoir_sel_withdraw_file),ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
+    !
     !     Call systems programs to get started
     !
     !     SUBROUTINE BEGIN reads control file, sets up topology and
@@ -128,7 +135,6 @@ PROGRAM RBM10_VIC
     !
     !     SUBROUTINE BEGIN reads in river system information from the NETWORK file
     !
-
     CALL BEGIN(param_file, spatial_file)
     !
     !     SUBROUTINE SYSTMM performs the simulations
@@ -143,6 +149,7 @@ PROGRAM RBM10_VIC
     CLOSE(36)
     CLOSE(37)
     CLOSE(38)
+    CLOSE(39)
     CLOSE(90)
     STOP
 END PROGRAM RBM10_VIC

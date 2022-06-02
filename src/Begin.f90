@@ -44,7 +44,7 @@ Subroutine BEGIN(param_file,spatial_file)
     !
     jul_start = Julian(start_year,start_month,start_day)
     !
-    read(90,*) nreach,flow_cells,heat_cells,source,reservoir,nres
+    read(90,*) nreach,flow_cells,heat_cells,source,reservoir,nres,select_withdraw
     !
     ! Allocate dynamic arrays
     !

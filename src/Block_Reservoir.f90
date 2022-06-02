@@ -7,6 +7,7 @@ module Block_Reservoir
     ! Logical
     !
     logical :: reservoir ! whether there is reservoir in the system
+    logical :: select_withdraw ! whether to implement selective withdrawal in the system
     logical, dimension(:),   allocatable  :: res_pres ! whether reservoir exists at specific grid cell
     logical, dimension(:),   allocatable  :: res_start !
     logical, dimension(:),   allocatable  :: initial_storage !
@@ -67,6 +68,7 @@ module Block_Reservoir
     real, dimension(:),   allocatable  :: volume_h_min
     real, dimension(:),   allocatable  :: volume_e_min
     real, dimension(:,:),   allocatable  :: res_storage
+    real, dimension(:,:),   allocatable  :: eh_withdraw_ratio
     !
     !
     integer :: nres
