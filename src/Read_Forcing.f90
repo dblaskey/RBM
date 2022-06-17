@@ -125,19 +125,19 @@ SUBROUTINE Read_Forcing
     !
     ! Read in reservoir storage data
     !
-    res_storage(:,n2)=res_storage(:,n1)
-    read(38,*) ! Skip reading the date in storage file
-    do nreservoir=1,nres
-        read(38,*) res_storage(nreservoir, n1)
-    end do
+    !res_storage(:,n2)=res_storage(:,n1)
+    !read(38,*) ! Skip reading the date in storage file
+    !do nreservoir=1,nres
+    !    read(38,*) res_storage(nreservoir, n1)
+    !end do
     !
     ! Read in reservoir selective withdrawal data
     !
-    read(39,*) ! Skip reading the date in selective withdraw file
-    do nreservoir=1,nres
-        read(39,*) eh_withdraw_ratio(nreservoir, n1) &
-                  ,eh_withdraw_ratio(nreservoir, n2)
-    end do
+    !read(39,*) ! Skip reading the date in selective withdraw file
+    !do nreservoir=1,nres
+    !    read(39,*) eh_withdraw_ratio(nreservoir, n1) &
+    !              ,eh_withdraw_ratio(nreservoir, n2)
+    !end do
     !
     ! Call the water balance subroutine
     !
