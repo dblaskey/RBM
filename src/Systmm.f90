@@ -410,7 +410,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                         !   test output for a specific grid cell 
                         !
                         !
-                        if (ncell.eq.1827.and.nd.eq.197) write(*,*) nyear,nd,nr,ncell,ns,T_0
+                        ! if (ncell.eq.1827.and.nd.eq.197) write(*,*) nyear,nd,nr,ncell,ns,T_0
                         do nseg_temp=1,nseg_out_num
                             if (nseg_out(nr,ncell,nseg_temp).eq.ns) then
                                 call WRITE(time,nd,nr,ncell,ns,T_0,T_head(nr),dbt(ncell), &
