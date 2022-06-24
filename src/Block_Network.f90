@@ -15,8 +15,8 @@ Module Block_Network
     integer:: ndays,nreach,ntrb,nwpd
     integer,parameter::ns_max=3000
     integer,parameter::nseg_out_num=2
-    integer:: start_year,start_month,start_day
-    integer:: end_year,end_month,end_day
+    integer:: start_year,start_month,start_day !start_hour
+    integer:: end_year,end_month,end_day !end_hour
     integer:: numsub !number of subdaily timestep
     integer:: nsub
 !
