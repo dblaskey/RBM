@@ -7,12 +7,12 @@ Subroutine BEGIN(param_file,spatial_file)
     !
     implicit none
     !
-    character (len=8) :: end_date,start_date     
+    character (len=8) :: end_date,start_date     ! character*11 end_time,start_time
     character (len=8) :: lat
     character (len=10):: long
     character (len=200):: param_file,source_file,spatial_file
     !
-    integer:: Julian
+    integer:: Julian ! MAY NEED TO CHANGE THIS
     integer:: head_name,trib_cell
     integer:: jul_start,main_stem,nyear1,nyear2,nc,ncell,nseg
     integer:: ns_max_test,node,ncol,nrow,nr,cum_sgmnt
@@ -33,8 +33,12 @@ Subroutine BEGIN(param_file,spatial_file)
     !     Card Group I
     !
     read(90,*) start_date,end_date
-    read(start_date,'(i4,2i2)') start_year,start_month,start_day
-    read(end_date,  '(i4,2i2)') end_year,end_month,end_day
+    read(start_date,'(i4,2i2)') start_year,start_month,start_day ! ADD START HOUR, read(30,*) start_time,end_time,nwpd,nd_start
+    read(end_date,  '(i4,2i2)') end_year,end_month,end_day ! ADD END HOUR
+    !read(start_date,'(i4,2i2,1x,i2)') start_year,start_month
+    !&                                 ,start_day,start_hour
+    !read(end_date,'(i4,2i2,1x,i2)') end_year,end_month
+    !&                               ,end_day,end_hour
     nyear1=start_year
     nyear2=end_year
     write(*,'(2(2x,i4,2i2))')  &
@@ -44,7 +48,7 @@ Subroutine BEGIN(param_file,spatial_file)
     !
     jul_start = Julian(start_year,start_month,start_day)
     !
-    read(90,*) nreach,flow_cells,heat_cells,source,reservoir,nres,select_withdraw
+    read(90,*) nreach,flow_cells,heat_cells,source,reservoir,nres,select_withdraw ! remove source, reservoir, nres, select withdraw
     !
     ! Allocate dynamic arrays
     !
