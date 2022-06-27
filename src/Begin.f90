@@ -262,9 +262,9 @@ if(ns_max_test.gt.ns_max) then
     stop
 end if
 !
-nwpd=1
+nwpd=1 ! comment this out an have number of timesteps per day read from the file otherwise I can just hardwire 8
 xwpd=nwpd
-dt_comp=86400./xwpd
+dt_comp=86400./xwpd 
 !
 !     ******************************************************
 !                         Return to RMAIN
