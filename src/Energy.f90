@@ -11,7 +11,7 @@ SUBROUTINE Energy(T_surf,q_surf,ncell,z,nd)
    real::q_tot,q_deriv,temp_calc
    real::rate_temp,error_estimate,timestep
 !
-   T_fit(1)=T_surf-1.0
+   T_fit(1)=T_surf-1.0  ! PNNL uses +/- 0.5
    T_fit(2)=T_surf+1.0
    do i=1,2
       e0=2.1718E8*EXP(-4157.0/(T_fit(i)+239.09))
@@ -22,7 +22,7 @@ SUBROUTINE Energy(T_surf,q_surf,ncell,z,nd)
       q_conv=rb*q_evap
       q_evap=q_evap*(e0-ea(ncell))
       q_ws=6.693E-2+1.471E-3*T_fit(i)
-      q_fit(i)=q_ns(ncell)+q_na(ncell)-q_ws-q_evap+q_conv
+      q_fit(i)=q_ns(ncell)+q_na(ncell)-q_ws-q_evap+q_conv ! PNNL q_ns(ncell)+0.97*q_na(ncell)-q_ws-q_evap+q_conv
 !      if (ncell.eq.1827.and.nd.eq.197) write(*,*) &
 !        'energy',q_ns(ncell),q_na(ncell),-q_ws,-q_evap,q_conv, &
 !        'air',dbt(ncell),wind(ncell)
