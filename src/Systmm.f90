@@ -211,12 +211,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                 !
                 DO nr=1,nreach
                     !
-                    nc_head=segment_cell(nr,1)
+                    nc_head=segment_cell(nr,1) ! THIS IS DIFFERENT FROM HOW THE LITERATURE DESCRIBES THIS FUNCTION
                     !
                     !     Determine smoothing parameters (UW_JRY_2011/06/21)
                     !
                     rminsmooth=1.0-smooth_param(nr)
-                    T_smth(nr)=rminsmooth*T_smth(nr)+smooth_param(nr)*dbt(nc_head)
+                    T_smth(nr)=rminsmooth*T_smth(nr)+smooth_param(nr)*dbt(nc_head) ! Update for daily timestep????
                     !
                     !     Variable Mohseni parameters (UW_JRY_2011/06/16)
                     !
@@ -379,7 +379,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                     T_0 = T_0
                                 end if
                                 !
-                                if (T_0.lt.0.5) T_0 =0.5
+                                if (T_0.lt.0.1) T_0 =0.1 ! No negative river temps. Updated to 0.1 from 0.5. Check for instability
                                 !
                                 Q_inflow_out=Q_inflow
                                 Q_outflow_out=Q_outflow
@@ -633,7 +633,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
         end do
     !
     !     End of year loop
-    !
+    !       THIS IS WHERE WE NEED TO WRITE TO A RESETART FILE????
     end do
     !
     !
