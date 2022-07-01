@@ -123,7 +123,7 @@ SUBROUTINE Read_Forcing
         end if
     end do
     !
-    ! Read in reservoir storage data
+    ! Read in reservoir storage data CREATE AN IF STATEMENT TO SAY IF RESERVIOR ON
     !
     !res_storage(:,n2)=res_storage(:,n1)
     !read(38,*) ! Skip reading the date in storage file
