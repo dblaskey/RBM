@@ -136,12 +136,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     temp_sto=0.5
     ! Initialize headwaters temperatures
     !
-    T_head=4.0
+    T_head=0.1
     !
     !
     ! Initialize smoothed air temperatures for estimating headwaters temperatures
     !
-    T_smth=4.0
+    T_smth=0.1
     !
     !     open the output file
     !
@@ -398,7 +398,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                 end if
                                 dt_total=dt_total+dt_calc
                             end do
-                            if (T_0.lt.0.5) T_0=0.5
+                            if (T_0.lt.0.1) T_0=0.1
                             temp(nr,ns,n2)=T_0
                             T_trib(nr)=T_0
                             !!sto(nr,ns,n2)=sto_post
