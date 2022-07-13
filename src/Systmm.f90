@@ -52,7 +52,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
     !
     ! Allocate the arrays
     !
-    allocate (temp(nreach,0:ns_max,2))
+    allocate (temp(nreach,-2:ns_max,2))
     allocate (sto(nreach,ns_max,2))
     allocate (temp_sto(nreach,ns_max,2))
     allocate (T_head(nreach))
