@@ -39,7 +39,7 @@ module Block_Energy
       real,parameter   :: pf=0.640,pi=3.14159
       real,parameter   :: rfac=304.8 !rho/Cp kg/meter**3/Kilocalories/kg/Deg K  
       real,parameter   :: sec_day = 86400 !number of seconds in a day
-      real,parameter   :: a_z=0.408, b_z=0.392 !Leopold parameter for depth. Do these get overwritten somewhere
-      real,parameter   :: a_w=4.346, b_w=0.520 !Leopold parameter for width do these get overwritten somewhere
+      real,parameter   :: a_z=0.700, b_z=0.600 !Leopold parameter for depth. Do these get overwritten somewhere
+      real,parameter   :: a_w=4.100, b_w=0.500 !Leopold parameter for width do these get overwritten somewhere
 !
 end module Block_Energy  
