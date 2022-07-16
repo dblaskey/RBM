@@ -11,8 +11,8 @@ SUBROUTINE Read_Forcing
     integer :: nreservoir,n1,n2
     real    :: Q_avg,Q_dmmy
     real    :: z_temp,w_temp
-    real    :: min_flow = 3.0
-    real    :: min_depth = 3.0
+    real    :: min_flow = 5.0
+    real    :: min_depth = 5.0
     !
     n1=1
     n2=2
