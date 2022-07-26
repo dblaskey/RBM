@@ -1,4 +1,4 @@
-SUBROUTINE WRITE_RESTART(year,nr,ncell,ns,T_0,T_head)
+SUBROUTINE WRITE_RESTART(outPrefix,year,nr,ncell,ns,T_0,T_head)
 !
 Implicit NONE
 !
@@ -8,6 +8,7 @@ real(8) :: time
 real    :: T_head
 character (len=200 ):: restart_file
 character(len=10) :: file_id
+character (len=200 ):: outPrefix
 !
 ! Write the integer into a string:
 write(file_id, '(i0)') year
