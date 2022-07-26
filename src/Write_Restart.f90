@@ -14,7 +14,6 @@ character (len=200 ):: outPrefix
 write(file_id, '(i0)') nyear
 !
 restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
-write(*,*) ' File Name - ',TRIM(restart_file)
 open(19,file=TRIM(restart_file),status='unknown')
 write (19,'(3i6,2f8.2)')           &
             nr,ncell,ns,T_0,T_head
