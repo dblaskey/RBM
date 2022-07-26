@@ -401,6 +401,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                             T_trib(nr)=T_0
                             !!sto(nr,ns,n2)=sto_post
                             !!temp_sto(nr,ns,n2)= T_0
+                            
+                            if(nd .eq. nd_year .and. ndd = nwpd) then  ! nr = nreach ns = no_celm(nr),
+                                call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                         !
                         !   if the segment is located in reservoir
                         !
@@ -413,6 +416,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                             if (nseg_out(nr,ncell,nseg_temp).eq.ns) then
                                 call WRITE(time,nd,nr,ncell,ns,T_0,T_head(nr),dbt(ncell), &
                                     Q_inflow_out, Q_outflow_out)
+                                !call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                             if (ncell.eq.1827) write(89,*)nyear,nd,nr,ncell,ns,T_0,temp_equil,time_equil,deriv_2nd*dt_comp**2/2
                             end if
                         end do
@@ -584,8 +588,6 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                                     T_head(nr),dbt(segment_cell(nr,nsegment)), &
                                                     Q_res_inflow(res_no), Q_res_outflow(res_no), &
                                                     res_storage_post, T_res(res_no))
-                                                    
-                                                    ! output file with final lines (AKA restart file)
                                             end if
                                         end do 
                                     end do
