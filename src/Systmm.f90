@@ -129,6 +129,10 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     allocate (res_stratif_start(nres))
     allocate (res_turnover(nres))
     !
+    allocate (dummy1(nreach))
+    allocate (dummy2(nreach))
+    allocate (dummy3(nreach))
+    allocate (temp_restart(nreach))
     !
     ! Initialize some arrays
     !
@@ -177,14 +181,10 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
             T_smth=0.1
         else
             !
-            allocate (dummy1(nreach))
-            allocate (dummy2(nreach))
-            allocate (dummy3(nreach))
-            allocate (temp_restart(nreach))
             !
             write(restart_file_id_read, '(i0)') nyear-1
             restart_file_read=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(restart_file_id_read))//'.r'
-            read(17,*) dummy1,cdummy1,dummy3,temp_restart,T_head
+            read(17,*) dummy1,dummy1,dummy3,temp_restart,T_head
             ! Initialize smoothed air temperatures for estimating headwaters temperatures. Not in restart
             !
             T_smth=0.1
