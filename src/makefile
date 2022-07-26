@@ -12,7 +12,7 @@ objects = rbm10_VIC.o Begin.o Systmm.o Particle_Track.o \
           density_subroutine.o flow_subroutine.o \
           Error_estimate.o \
           reservoir_subroutine_implicit.o \
-          Water_Balance.o Write.o
+          Water_Balance.o Write.o Write_Restart.o
 f90comp = gfortran # -O0 -g #-O2
 # Makefile
 rbm10_VIC: $(objects)
@@ -49,6 +49,8 @@ Particle_Track.o: block_hydro.mod block_network.mod block_reservoir.mod Particle
 	$(f90comp) -c Particle_Track.f90
 Write.o: Write.f90
 	$(f90comp) -c Write.f90
+Write_Restart.o: Write_Restart.f90
+	$(f90comp) -c Write_Restart.f90
 density_subroutine.o: data_type.mod density_subroutine.f90
 	$(f90comp) -c density_subroutine.f90
 flow_subroutine.o: block_hydro.mod block_network.mod block_reservoir.mod flow_subroutine.f90
