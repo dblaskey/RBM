@@ -1,14 +1,20 @@
-SUBROUTINE WRITE_RESTART(time,nd,nr,ncell,ns,T_0,T_head,dbt,Q_inflow,Q_outflow)
+SUBROUTINE WRITE_RESTART(year,nr,ncell,ns,T_0,T_head)
 !
 Implicit NONE
 !
-integer :: nd,nr,ncell,ns 
-real    :: Q_inflow,Q_outflow
-real    :: T_0,T_dist, storage, T_storage
+integer :: year,nr,ncell,ns 
+real    :: T_0
 real(8) :: time
 real    :: T_head
-real    :: dbt
+character (len=200 ):: restart_file
+character(len=10) :: file_id
 !
-write (20,'(f12.4,4i6,3f8.2,4f25.1,f8.1,f8.4)')           &
-            time,nd,nr,ncell,ns,T_0,T_head,dbt,Q_inflow,Q_outflow
+! Write the integer into a string:
+write(file_id, '(i0)') year
+!
+restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
+open(19,file=TRIM(restart_file),status='NEW')
+write (19,'(3f8.2,4f25.1,f8.1,f8.4)')           &
+            nr,ncell,ns,T_0,T_head
+close(19)
 end SUBROUTINE WRITE_RESTART
