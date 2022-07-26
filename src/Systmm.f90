@@ -13,6 +13,8 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     character (len=200):: param_file
     character (len=200):: res_file
     character (len=200 ):: outPrefix
+    character (len=200 ):: restart_file
+    character(len=10) :: file_id
     !
     integer          :: ncell,nncell,ncell0,nc_head,no_flow,no_heat
     integer          :: nc,nd,ndd,nm,nr,ns
@@ -166,6 +168,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     !
     DO nyear=start_year,end_year
         write(*,*) ' Simulation Year - ',nyear,start_year,end_year
+        !
+        ! Write restart file
+        write(file_id, '(i0)') nyear
+        restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
+        open(19,file=TRIM(restart_file),status='unknown')
+        !
         nd_year=365
         if (mod(nyear,4).eq.0) nd_year=366
         !
@@ -403,7 +411,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             !!sto(nr,ns,n2)=sto_post
                             !!temp_sto(nr,ns,n2)= T_0
                             if(nd.eq.nd_year.and.ndd.eq.nwpd) then  ! nr = nreach ns = no_celm(nr),
-                                call WRITE_RESTART(outPrefix,nyear,nr,ncell,ns,T_0,T_head(nr))
+                                call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                             end if        
                         !
                         !   if the segment is located in reservoir
