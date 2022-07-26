@@ -584,6 +584,8 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                                                     T_head(nr),dbt(segment_cell(nr,nsegment)), &
                                                     Q_res_inflow(res_no), Q_res_outflow(res_no), &
                                                     res_storage_post, T_res(res_no))
+                                                    
+                                                    ! output file with final lines (AKA restart file)
                                             end if
                                         end do 
                                     end do
