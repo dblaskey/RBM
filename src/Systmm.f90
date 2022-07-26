@@ -14,7 +14,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     character (len=200):: res_file
     character (len=200 ):: outPrefix
     character (len=200 ):: restart_file
-    character(len=10) :: file_id
+    character(len=100) :: restart_file_id
+    character (len=200 ):: restart_file_read
+    character(len=100) :: restart_file_id_read
     !
     integer          :: ncell,nncell,ncell0,nc_head,no_flow,no_heat
     integer          :: nc,nd,ndd,nm,nr,ns
@@ -134,21 +136,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     x_part=0.
     no_dt=0
     nstrt_elm=0
-    temp=0.5
     sto=0
     temp_sto=0.5
-    ! Initialize headwaters temperatures
     !
-    T_head=0.1
-    !
-    !
-    ! Initialize smoothed air temperatures for estimating headwaters temperatures
-    !
-    T_smth=0.1
-    !
-    !     open the output file
-    !
-    open(20,file=TRIM(temp_file),status='unknown')
     !
     !
     ! Initialize dummy counters that facilitate updating simulated values
@@ -168,11 +158,39 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     !
     DO nyear=start_year,end_year
         write(*,*) ' Simulation Year - ',nyear,start_year,end_year
+        ! Open output file
+        open(20,file=TRIM(temp_file),status='unknown')
         !
         ! Write restart file
-        write(file_id, '(i0)') nyear
-        restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
+        write(restart_file_id, '(i0)') nyear
+        restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(restart_file_id))//'.r'
         open(19,file=TRIM(restart_file),status='unknown')
+        !
+        if (nyear.eq.start_year) then
+            ! Initialize arrays in the first year, AKA Cold Start
+            temp=0.5
+            ! Initialize headwaters temperatures
+            !
+            T_head=0.1
+            ! Initialize smoothed air temperatures for estimating headwaters temperatures
+            !
+            T_smth=0.1
+        else
+            !
+            allocate (dummy1(nreach))
+            allocate (dummy2(nreach))
+            allocate (dummy3(nreach))
+            allocate (temp_restart(nreach))
+            !
+            write(restart_file_id_read, '(i0)') nyear-1
+            restart_file_read=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(restart_file_id_read))//'.r'
+            read(17,*) dummy1,cdummy1,dummy3,temp_restart,T_head
+            ! Initialize smoothed air temperatures for estimating headwaters temperatures. Not in restart
+            !
+            T_smth=0.1
+            !
+            temp = temp_restart
+        end if
         !
         nd_year=365
         if (mod(nyear,4).eq.0) nd_year=366
@@ -410,9 +428,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             T_trib(nr)=T_0
                             !!sto(nr,ns,n2)=sto_post
                             !!temp_sto(nr,ns,n2)= T_0
-                        if(nd.eq.nd_year.and.ndd.eq.nwpd) then
-                            call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
-                        end if       
+                        !if(nd.eq.nd_year.and.ndd.eq.nwpd) then
+                        !    call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
+                        !end if       
                         !
                         !   if the segment is located in reservoir
                         !
@@ -425,7 +443,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             if (nseg_out(nr,ncell,nseg_temp).eq.ns) then
                                 call WRITE(time,nd,nr,ncell,ns,T_0,T_head(nr),dbt(ncell), &
                                     Q_inflow_out, Q_outflow_out)
-                                !call WRITE_RESTART(nr,ncell,nseg_temp,T_0,T_head(nr))
+                                call WRITE_RESTART(nr,ncell,nseg_temp,T_0,T_head(nr))
                                 !call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                             if (ncell.eq.1827) write(89,*)nyear,nd,nr,ncell,ns,T_0,temp_equil,time_equil,deriv_2nd*dt_comp**2/2
                             end if
@@ -642,6 +660,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
         !
         !     End of main loop (ND=1,365/366)
         !
+        close(20)
         end do
     !
     !     End of year loop
