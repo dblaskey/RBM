@@ -1,8 +1,8 @@
-SUBROUTINE WRITE_RESTART(outPrefix,year,nr,ncell,ns,T_0,T_head)
+SUBROUTINE WRITE_RESTART(outPrefix,nyear,nr,ncell,ns,T_0,T_head)
 !
 Implicit NONE
 !
-integer :: year,nr,ncell,ns 
+integer :: nyear,nr,ncell,ns 
 real    :: T_0
 real(8) :: time
 real    :: T_head
@@ -11,9 +11,8 @@ character(len=10) :: file_id
 character (len=200 ):: outPrefix
 !
 ! Write the integer into a string:
-write(file_id, '(i0)') year
+write(file_id, '(i0)') nyear
 !
-print *, outPrefix
 restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
 write(*,*) ' File Name - ',TRIM(restart_file)
 open(19,file=TRIM(restart_file),status='unknown')
