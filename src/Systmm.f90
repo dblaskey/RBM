@@ -425,7 +425,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             if (nseg_out(nr,ncell,nseg_temp).eq.ns) then
                                 call WRITE(time,nd,nr,ncell,ns,T_0,T_head(nr),dbt(ncell), &
                                     Q_inflow_out, Q_outflow_out)
-                                call WRITE_RESTART(nr,ncell,nseg_temp,T_0,T_head(nr))
+                                !call WRITE_RESTART(nr,ncell,nseg_temp,T_0,T_head(nr))
                                 !call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                             if (ncell.eq.1827) write(89,*)nyear,nd,nr,ncell,ns,T_0,temp_equil,time_equil,deriv_2nd*dt_comp**2/2
                             end if
