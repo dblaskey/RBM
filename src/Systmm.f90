@@ -1,4 +1,4 @@
-SUBROUTINE SYSTMM(temp_file,res_file,param_file)
+SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     !
     use Block_Energy
     use Block_Hydro
