@@ -48,7 +48,7 @@ Subroutine BEGIN(param_file,spatial_file)
     !
     jul_start = Julian(start_year,start_month,start_day)
     !
-    read(90,*) nreach,flow_cells,heat_cells,time_steps,source,reservoir,nres,select_withdraw ! remove source, reservoir, nres, select withdraw
+    read(90,*) nreach,flow_cells,heat_cells,nwpd,source,reservoir,nres,select_withdraw ! remove source, reservoir, nres, select withdraw
     !
     ! Allocate dynamic arrays
     !
@@ -263,7 +263,7 @@ if(ns_max_test.gt.ns_max) then
 end if
 !
 !nwpd=8 
-xwpd=time_steps
+xwpd=nwpd
 dt_comp=86400./xwpd 
 !
 !     ******************************************************
