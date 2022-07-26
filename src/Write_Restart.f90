@@ -13,6 +13,7 @@ character (len=200 ):: outPrefix
 ! Write the integer into a string:
 write(file_id, '(i0)') year
 !
+print *, outPrefix
 restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(file_id))//'.r'
 write(*,*) ' File Name - ',TRIM(restart_file)
 open(19,file=TRIM(restart_file),status='unknown')
