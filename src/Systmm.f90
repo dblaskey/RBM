@@ -49,7 +49,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     real             :: dt_ttotal
     real,dimension(4):: ta,xa
     !
-    real,dimension(:),allocatable     :: T_head,T_smth,T_trib
+    real,dimension(:),allocatable     :: T_head,T_smth,T_trib,dummy1,dummy2,dummy3,temp_restart
 
     logical:: DONE
     logical:: ns_res_pres
