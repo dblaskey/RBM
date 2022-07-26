@@ -403,7 +403,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             !!sto(nr,ns,n2)=sto_post
                             !!temp_sto(nr,ns,n2)= T_0
                             if(nd.eq.nd_year.and.ndd.eq.nwpd) then  ! nr = nreach ns = no_celm(nr),
-                                call WRITE_RESTART(outPrefix,year,nr,ncell,ns,T_0,T_head(nr))
+                                call WRITE_RESTART(outPrefix,nyear,nr,ncell,ns,T_0,T_head(nr))
                             end if        
                         !
                         !   if the segment is located in reservoir
