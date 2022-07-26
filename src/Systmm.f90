@@ -401,10 +401,8 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file)
                             T_trib(nr)=T_0
                             !!sto(nr,ns,n2)=sto_post
                             !!temp_sto(nr,ns,n2)= T_0
-                            if(nd .eq. nd_year) then  
-                                if (ndd = nwpd) then! nr = nreach ns = no_celm(nr),
-                                    call WRITE_RESTART(year,nr,ncell,ns,T_0,T_head(nr))
-                                end if
+                            if(nd.eq.nd_year.and.ndd.eq.nwpd) then  ! nr = nreach ns = no_celm(nr),
+                                call WRITE_RESTART(year,nr,ncell,ns,T_0,T_head(nr))
                             end if        
                         !
                         !   if the segment is located in reservoir
