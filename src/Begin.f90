@@ -262,7 +262,6 @@ if(ns_max_test.gt.ns_max) then
     stop
 end if
 !
-!nwpd=8 
 xwpd=nwpd
 dt_comp=86400./xwpd 
 !
