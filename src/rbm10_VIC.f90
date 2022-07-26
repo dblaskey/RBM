@@ -139,7 +139,7 @@ PROGRAM RBM10_VIC
     !
     !     SUBROUTINE SYSTMM performs the simulations
     !
-    CALL SYSTMM(temp_file,res_file,param_file) ! (WUR_WF_MvV_2011/01/05)
+    CALL SYSTMM(temp_file,res_file,param_file,outPrefix) ! (WUR_WF_MvV_2011/01/05)
     !
     !     Close files after simulation is complete
     !
