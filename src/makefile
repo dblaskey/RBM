@@ -1,11 +1,11 @@
 #
-# Makefile for the grid-based semi-Lagrangian water temperature model, RBM10_VIC
+# Makefile for the grid-based semi-Lagrangian water temperature model, RBM10_mizu
 #
 # Start of the makefile
 #
 # Defining variables
 #
-objects = rbm10_VIC.o Begin.o Systmm.o Particle_Track.o \
+objects = rbm10_mizu.o Begin.o Systmm.o Particle_Track.o \
           Energy.o Julian.o tntrp.o Read_Forcing.o \
           Block_Energy.o Block_Hydro.o Block_Network.o \
           data_type.o Block_Reservoir.o \
@@ -15,8 +15,8 @@ objects = rbm10_VIC.o Begin.o Systmm.o Particle_Track.o \
           Water_Balance.o Write.o Write_Restart.o
 f90comp = gfortran # -O0 -g #-O2
 # Makefile
-rbm10_VIC: $(objects)
-	$(f90comp) -o rbm10_VIC $(objects)
+rbm10_mizu: $(objects)
+	$(f90comp) -o rbm10_mizu $(objects)
 Block_Energy.o: Block_Energy.f90
 	$(f90comp) -c Block_Energy.f90
 block_energy.mod: Block_Energy.f90
@@ -65,11 +65,11 @@ tntrp.o: tntrp.f90
 	$(f90comp) -c tntrp.f90
 Water_Balance.o: block_hydro.mod block_network.mod Water_Balance.f90
 	$(f90comp) -c Water_Balance.f90
-rbm10_VIC.o: rbm10_VIC.f90
-	$(f90comp) -c rbm10_VIC.f90
+rbm10_mizu.o: rbm10_mizu.f90
+	$(f90comp) -c rbm10_mizu.f90
 
 # Cleaning everything
 clean:
 	rm block_energy.mod block_hydro.mod block_network.mod block_reservoir.mod \
-           rbm10_VIC
+           rbm10_mizu
 	rm $(objects)
