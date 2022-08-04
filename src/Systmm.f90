@@ -1,4 +1,4 @@
-SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
+SUBROUTINE SYSTMM(res_file,param_file,flowPrefix,heatPrefix,outPrefix)
     !
     use Block_Energy
     use Block_Hydro
@@ -12,11 +12,12 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     character (len=200):: temp_file
     character (len=200):: param_file
     character (len=200):: res_file
-    character (len=200 ):: outPrefix
-    character (len=200 ):: restart_file
-    character(len=100) :: restart_file_id
-    character (len=200 ):: restart_file_read
-    character(len=100) :: restart_file_id_read
+    character (len=200):: outPrefix
+    character (len=200):: flowPrefix
+    character (len=200):: heatPrefix
+    character (len=200):: flow_file
+    character (len=200):: heat_file
+    character (len=200):: year_file_id
     !
     integer          :: ncell,nncell,ncell0,nc_head,no_flow,no_heat
     integer          :: nc,nd,ndd,nm,nr,ns
@@ -49,7 +50,7 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     real             :: dt_ttotal
     real,dimension(4):: ta,xa
     !
-    real,dimension(:),allocatable     :: T_head,T_smth,T_trib,dummy1,dummy2,dummy3,temp_restart
+    real,dimension(:),allocatable     :: T_head,T_smth,T_trib
 
     logical:: DONE
     logical:: ns_res_pres
@@ -129,11 +130,6 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     allocate (res_stratif_start(nres))
     allocate (res_turnover(nres))
     !
-    allocate (dummy1(nreach))
-    allocate (dummy2(nreach))
-    allocate (dummy3(nreach))
-    allocate (temp_restart(nreach))
-    !
     ! Initialize some arrays
     !
     dt_part=0.
@@ -163,34 +159,17 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
     DO nyear=start_year,end_year
         write(*,*) ' Simulation Year - ',nyear,start_year,end_year
         ! Open output file
+        write(year_file_id, '(i0)') nyear
+        temp_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(year_file_id))//'.temp'
         open(20,file=TRIM(temp_file),status='unknown')
+        ! Initialize arrays in the first year, AKA Cold Start
+        temp=0.1
+        ! Initialize headwaters temperatures
         !
-        ! Write restart file
-        write(restart_file_id, '(i0)') nyear
-        restart_file=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(restart_file_id))//'.r'
-        open(19,file=TRIM(restart_file),status='unknown')
+        T_head=0.1
+        ! Initialize smoothed air temperatures for estimating headwaters temperatures
         !
-        if (nyear.eq.start_year) then
-            ! Initialize arrays in the first year, AKA Cold Start
-            temp=0.5
-            ! Initialize headwaters temperatures
-            !
-            T_head=0.1
-            ! Initialize smoothed air temperatures for estimating headwaters temperatures
-            !
-            T_smth=0.1
-        else
-            !
-            !
-            write(restart_file_id_read, '(i0)') nyear-1
-            restart_file_read=TRIM(outPrefix)//'_'//TRIM(ADJUSTL(restart_file_id_read))//'.r'
-            read(17,*) dummy1,dummy1,dummy3,temp_restart,T_head
-            ! Initialize smoothed air temperatures for estimating headwaters temperatures. Not in restart
-            !
-            T_smth=0.1
-            !
-            temp = temp_restart
-        end if
+        T_smth=0.1
         !
         nd_year=365
         if (mod(nyear,4).eq.0) nd_year=366
@@ -224,6 +203,16 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
             DO ndd=1,nwpd
                 xdd = ndd
                 time=year+(xd+(xdd-0.5)*hpd)/xd_year
+                !
+                !     Open file with hydrologic data
+                !
+                flow_file=TRIM(flowPrefix)//'_'//TRIM(ADJUSTL(year_file_id))
+                open(unit=35,FILE=TRIM(flow_file), ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
+                !
+                !     Open file with meteorologic data
+                !
+                heat_file=TRIM(heatPrefix)//'_'//TRIM(ADJUSTL(year_file_id))
+                open(unit=36,FILE=TRIM(heat_file), ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
                 !
                 ! Read the hydrologic and meteorologic forcings
                 !
@@ -443,8 +432,6 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
                             if (nseg_out(nr,ncell,nseg_temp).eq.ns) then
                                 call WRITE(time,nd,nr,ncell,ns,T_0,T_head(nr),dbt(ncell), &
                                     Q_inflow_out, Q_outflow_out)
-                                call WRITE_RESTART(nr,ncell,nseg_temp,T_0,T_head(nr))
-                                !call WRITE_RESTART(nr,ncell,ns,T_0,T_head(nr))
                             if (ncell.eq.1827) write(89,*)nyear,nd,nr,ncell,ns,T_0,temp_equil,time_equil,deriv_2nd*dt_comp**2/2
                             end if
                         end do
@@ -660,7 +647,9 @@ SUBROUTINE SYSTMM(temp_file,res_file,param_file,outPrefix)
         !
         !     End of main loop (ND=1,365/366)
         !
-        close(20)
+        CLOSE(20)
+        CLOSE(35)
+        CLOSE(36)
         end do
     !
     !     End of year loop
