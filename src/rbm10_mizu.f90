@@ -1,5 +1,5 @@
 !
-PROGRAM RBM10_VIC
+PROGRAM RBM10_mizu
     !
     !     Dynamic river basin model for simulating water quality in
     !     branching river systems with freely-flowing river segments.
@@ -45,11 +45,10 @@ PROGRAM RBM10_VIC
     !
     character (len=200 ):: inPrefix
     character (len=200 ):: outPrefix
-    character (len=200 ):: flow_file
-    character (len=200 ):: heat_file
+    character (len=200 ):: flowPrefix
+    character (len=200 ):: heatPrefix
     character (len=200 ):: net_file
     character (len=200 ):: param_file
-    character (len=200 ):: temp_file
     character (len=200 ):: res_file
     character (len=200 ):: spatial_file
     character (len=200 ):: reservoir_file
@@ -81,12 +80,12 @@ PROGRAM RBM10_VIC
     net_file      = TRIM(inPrefix)//'_Network'
     param_file    = TRIM(inPrefix)//'_Parameters'
     spatial_file  = TRIM(outPrefix)//'.Spat'
-    temp_file     = TRIM(outPrefix)//'.Temp'
+    !temp_file     = TRIM(outPrefix)//'.Temp'
     res_file      = TRIM(outPrefix)//'.Resv'
     !
     write(*,*) 'Network file    : ',net_file
     write(*,*) 'Parameter file  : ',param_file!
-    write(*,*) 'Temperature file: ',temp_file
+    !write(*,*) 'Temperature file: ',temp_file
     write(*,*) 'Spatial file: ',spatial_file
     write(*,*) 'Reservoir file:   ',res_file
     !
@@ -95,19 +94,8 @@ PROGRAM RBM10_VIC
     !     Read header information from control file
     !
     read(90,*)
-    read(90,'(A)') flow_file
-    !
-    !     Open file with hydrologic data
-    !
-    open(unit=35,FILE=TRIM(flow_file), ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
-    !
-    !
-    read(90,'(A)') heat_file
-    !
-    !     Open file with meteorologic data
-    !
-    open(unit=36,FILE=TRIM(heat_file), ACCESS='SEQUENTIAL',FORM='FORMATTED', STATUS='old')
-    !
+    read(90,'(A)') flowPrefix
+    read(90,'(A)') heatPrefix
     read(90,'(A)') reservoir_file
     !
     !     Open file with reservoir parameters
@@ -139,17 +127,15 @@ PROGRAM RBM10_VIC
     !
     !     SUBROUTINE SYSTMM performs the simulations
     !
-    CALL SYSTMM(temp_file,res_file,param_file,outPrefix) ! (WUR_WF_MvV_2011/01/05)
+    CALL SYSTMM(res_file,param_file,flowPrefix,heatPrefix,outPrefix) ! (WUR_WF_MvV_2011/01/05)
     !
     !     Close files after simulation is complete
     !
     write(*,*) ' Closing files after simulation'
 
-    CLOSE(35)
-    CLOSE(36)
     CLOSE(37)
     CLOSE(38)
     CLOSE(39)
     CLOSE(90)
     STOP
-END PROGRAM RBM10_VIC
+END PROGRAM RBM10_mizu
