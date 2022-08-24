@@ -647,10 +647,10 @@ SUBROUTINE SYSTMM(res_file,param_file,flowPrefix,heatPrefix,outPrefix)
         !
         !     End of main loop (ND=1,365/366)
         !
+        end do
         CLOSE(20)
         CLOSE(35)
         CLOSE(36)
-        end do
     !
     !     End of year loop
     !       
